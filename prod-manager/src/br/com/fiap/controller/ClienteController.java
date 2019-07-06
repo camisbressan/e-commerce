@@ -18,18 +18,20 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.fiap.entity.Cliente;
 import br.com.fiap.entity.Endereco;
+import br.com.fiap.entity.Pedido;
 import br.com.fiap.service.IClienteService;
 import br.com.fiap.service.IEnderecoService;
+import br.com.fiap.service.IPedidoService;
 
 @RestController
 @RequestMapping("cliente")
 public class ClienteController {
 
-	@Autowired
-	private IClienteService cliService;
+	@Autowired private IClienteService cliService;
 	
-	@Autowired
-	private IEnderecoService enderecoService;
+	@Autowired private IEnderecoService enderecoService;
+	
+	@Autowired private IPedidoService pedidoServece;
 	
 	@GetMapping("{id}")
 	public ResponseEntity<Cliente> getById(@PathVariable("id") int id) {
@@ -76,7 +78,18 @@ public class ClienteController {
 	
   /*
    * Endereço do cliente
+   * 
    */
+	@GetMapping("{id}/enderecos")
+	public ResponseEntity<List<Endereco>> getCliEnd(@PathVariable("id") int id) {
+		Cliente c = cliService.getById(id);
+		if(c == null) {
+			return new ResponseEntity<List<Endereco>>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		List<Endereco> l = enderecoService.getByCliente(c);
+		return new ResponseEntity<List<Endereco>>(l, l.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK );
+		
+	};
 	
 	@PostMapping("{id}/endereco/adicionar")
 	public ResponseEntity<Void> addCliEndereco(@PathVariable("id") int id, @RequestBody Endereco endereco, UriComponentsBuilder builder) {
@@ -93,6 +106,21 @@ public class ClienteController {
             return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 		}
 		return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);
+		
+	}
+	@GetMapping("{id}/endereco/{endId}")
+	public ResponseEntity<Endereco> getCliEndereco(@PathVariable("id") int id, @PathVariable("endId") int endId, @RequestBody Endereco endereco) {
+		
+		Cliente c = cliService.getById(id);
+		if(c == null) {
+			return new ResponseEntity<Endereco>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		Endereco ed = enderecoService.getById(c, endId);
+		if(ed != null ) {
+			
+            return new ResponseEntity<Endereco>(ed, HttpStatus.OK);
+		}
+		return new ResponseEntity<Endereco>(HttpStatus.NO_CONTENT);
 		
 	}
 	
@@ -119,12 +147,30 @@ public class ClienteController {
 		if(c == null) {
 			return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);
 		}
-		
-		enderecoService.delete(endId);
+		Endereco ed = enderecoService.getById(c, endId);
+		if(ed == null) {
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+		}
+		enderecoService.delete(ed);
 		
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	
+	/**
+	 *  Pedidos
+	 */
 	
-	
+	@GetMapping("{id}/pedidos")
+	public ResponseEntity<List<Pedido>> getPedidoList(@PathVariable("id") int id) {
+		
+		Cliente c = cliService.getById(id);
+		if(c == null) {
+			return new ResponseEntity<List<Pedido>>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		List<Pedido> l = pedidoServece.getAllByCliente(c);
+		
+		return new ResponseEntity<List<Pedido>>(l, l.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK );
+		
+	}
 }

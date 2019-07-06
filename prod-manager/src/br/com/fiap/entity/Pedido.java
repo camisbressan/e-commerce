@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import br.com.fiap.pk.PedidosPK;
 
-@Entity
+@Entity(name = "pedidos")
 @Table(name = "pedidos")
 public class Pedido implements Serializable {
 	

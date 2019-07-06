@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-@Entity
+@Entity(name = "enderecos")
 @Table(name = "enderecos")
 public class Endereco implements Serializable {
 	

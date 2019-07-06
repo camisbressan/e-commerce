@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
+import br.com.fiap.entity.Cliente;
 import br.com.fiap.entity.Pedido;
 import br.com.fiap.repository.PedidoRepository;
 
@@ -24,6 +25,14 @@ public class PedidoService implements IPedidoService {
 	public List<Pedido> getAll() {
 		List<Pedido> list = new ArrayList<>();
 		repo.findAll().forEach(e -> list.add(e));
+		return list;
+	}
+	
+	@Override
+	@Cacheable(value= "allClientePedidosCache", key= "#cliente.id", unless= "#result.size() == 0")
+	public List<Pedido> getAllByCliente(Cliente cliente) {
+		List<Pedido> list = new ArrayList<>();
+		repo.findPedidoByClienteId(cliente.getId()).forEach(e -> list.add(e));
 		return list;
 	}
 
@@ -62,13 +71,13 @@ public class PedidoService implements IPedidoService {
 	@Override	
 	@Caching(
 		evict= { 
-			@CacheEvict(value= "pedidoCache", key= "#id"),
+			@CacheEvict(value= "pedidoCache", key= "#pedido.id"),
 			@CacheEvict(value= "clienteCache", key="#pedido.cliente.id"),
 			@CacheEvict(value= "allPedidosCache", allEntries= true)
 		}
 	)
-	public void delete(int id) {
-		repo.delete(repo.findById(id).get());	
+	public void delete(Pedido pedido) {
+		repo.delete(pedido);	
 		
 	}
 
