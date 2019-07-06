@@ -16,9 +16,24 @@ foobar.pluralize('goose') # returns 'geese'
 foobar.singularize('phenomena') # returns 'phenomenon'
 ```
 
+## Banco de dados
+```
+Limpar tabelas
+USE `loja`;
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE if EXISTS pedidos;
+DROP TABLE if EXISTS enderecos;
+DROP TABLE if EXISTS itens;
+DROP TABLE if EXISTS clientes;
+DROP TABLE if EXISTS produtos;
+```
+
 ## Contributing
 This project has the purpose of evaluating the discipline course of the Fiap, will be accepted only commits of the members of the group
 
 
 ## License
 [Apache License](http://www.apache.org/licenses/)
+
+#### links
+[makeareadme.com](https://www.makeareadme.com/)
