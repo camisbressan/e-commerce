@@ -2,6 +2,7 @@ package br.com.fiap.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -39,12 +40,16 @@ public class PedidoService implements IPedidoService {
 	@Override
 	@Cacheable(value= "pedidoCache", key= "#id")
 	public Pedido getById(int id) {
-		return repo.findById(id).get();
+		Optional<Pedido> opt = repo.findById(id);
+		if(opt.isPresent()) {
+			return opt.get();
+		}
+		return null;
 	}
 
 	@Override	
 	@Caching(
-		put= { @CachePut(value= "pedidoCache", key= "#pedido.id") },
+		put= { @CachePut(value= "pedidoCache", key= "#pedido.pedidoPK.codigo") },
 		evict= { 
 				@CacheEvict(value= "clienteCache", key="#pedido.cliente.id"),
 				@CacheEvict(value= "allClientesCache", allEntries= true),
@@ -57,7 +62,7 @@ public class PedidoService implements IPedidoService {
 
 	@Override	
 	@Caching(
-		put= { @CachePut(value= "pedidoCache", key= "#pedido.id") },
+		put= { @CachePut(value= "pedidoCache", key= "#pedido.pedidoPK.codigo") },
 		evict= { 
 				@CacheEvict(value= "clienteCache", key="#pedido.cliente.id"),
 				@CacheEvict(value= "allClientesCache", allEntries= true),
@@ -71,7 +76,7 @@ public class PedidoService implements IPedidoService {
 	@Override	
 	@Caching(
 		evict= { 
-			@CacheEvict(value= "pedidoCache", key= "#pedido.id"),
+			@CacheEvict(value= "pedidoCache", key= "#pedido.pedidoPK.codigo"),
 			@CacheEvict(value= "clienteCache", key="#pedido.cliente.id"),
 			@CacheEvict(value= "allPedidosCache", allEntries= true)
 		}

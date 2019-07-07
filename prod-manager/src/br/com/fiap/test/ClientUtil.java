@@ -72,7 +72,7 @@ public class ClientUtil {
 		// Produto objProduto = new Produto(1L, "Banana");
 		// util.addProdutoDemo(objProduto);
 
-		util.addProdutoDemo(new Produto(1L, "007 Golden Eye Reloaded", 54, 152.90));
+		util.addProdutoDemo(new Produto("007 Golden Eye Reloaded", 54, 152.90));
 
 		// objProduto.nome = "Laranja";
 		// util.updateProdutoDemo(objProduto);

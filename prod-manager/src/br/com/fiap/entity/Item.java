@@ -30,12 +30,23 @@ public class Item implements Serializable {
 	@Column(name = "ID")
 	private int id;
 
-	@Column(name = "QUANTIDADE")
-	private double quantidade;
+	@Column(name = "QUANTIDADE", columnDefinition="int(10)", nullable  = false)
+	private int quantidade;
+	
+	@Column(name = "VALOR_UNITARIO", columnDefinition="Decimal(10,2)", nullable  = false)
+	@org.hibernate.annotations.ColumnDefault("0.0")
+	private double valor;
+	
+	@Column(name = "VALOR_TOTAL", columnDefinition="Decimal(10,2)", nullable  = false)
+	@org.hibernate.annotations.ColumnDefault("0.0")
+	private double valorTotal;
+	
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({ @JoinColumn(name = "NUMPEDIDO", referencedColumnName = "NUMPEDIDO"),
-			@JoinColumn(name = "CATEGORIA", referencedColumnName = "CATEGORIA") })
+	@JoinColumns({ 
+		@JoinColumn(name = "NUM_PEDIDO", referencedColumnName = "NUM_PEDIDO"),
+		@JoinColumn(name = "CATEGORIA", referencedColumnName = "CATEGORIA") 
+	})
 	@JsonBackReference
 	private Pedido pedido;
 
@@ -47,11 +58,11 @@ public class Item implements Serializable {
 		this.id = id;
 	}
 
-	public double getQuantidade() {
+	public int getQuantidade() {
 		return quantidade;
 	}
 
-	public void setQuantidade(double quantidade) {
+	public void setQuantidade(int quantidade) {
 		this.quantidade = quantidade;
 	}
 
@@ -62,4 +73,22 @@ public class Item implements Serializable {
 	public void setPedido(Pedido pedido) {
 		this.pedido = pedido;
 	}
+
+	public double getValor() {
+		return valor;
+	}
+
+	public void setValor(double valor) {
+		this.valor = valor;
+	}
+
+	public double getValorTotal() {
+		return valorTotal;
+	}
+
+	public void setValorTotal(double valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+	
+	
 }

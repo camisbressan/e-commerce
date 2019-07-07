@@ -3,11 +3,15 @@ package br.com.fiap.pk;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Embeddable
 public class PedidosPK implements Serializable {
 	private static final long serialVersionUID = 1L;
-	@Column(name = "NUMPEDIDO")
+
+	@Column(name = "NUM_PEDIDO")
 	private int codigo;
 
 	@Column(name = "CATEGORIA")

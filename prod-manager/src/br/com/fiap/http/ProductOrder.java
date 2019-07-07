@@ -1,23 +1,31 @@
 package br.com.fiap.http;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import br.com.fiap.entity.Produto;
-import br.com.fiap.service.ProdutoService;
+import br.com.fiap.service.IProdutoService;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE)
 public class ProductOrder {
-	
-	@JsonProperty(required = true)
+
+	@JsonIgnore
 	private long produtoId;
 
-	@JsonProperty(required = true)
+	@JsonIgnore
 	private int quantidade;
 
+	@JsonIgnore
 	private Produto produto;
 
-	public long getProdutoId() {
-		return produtoId;
-	}
+	@JsonIgnore
+	private IProdutoService prodService;
 
 	public ProductOrder() {
 		this.produto = null;
@@ -25,15 +33,21 @@ public class ProductOrder {
 		this.produtoId = 0;
 	}
 
-	public ProductOrder(long produtoId, int quantidade) {
+	@JsonCreator
+	public ProductOrder(@JsonProperty("produtoId") long produtoId, @JsonProperty("quantidade") int quantidade) {
 		this.setQuantidade(quantidade);
 		this.setProdutoId(produtoId);
 	}
 
-	public void setProdutoId(long produtoId) {
-		produto = this.loadProduto(produtoId);
+	@JsonGetter("produtoId")
+	public long getProdutoId() {
+		return produtoId;
+	}
 
-		this.produtoId = (produto != null) ? produtoId : 0;
+	@JsonSetter("produtoId")
+	public void setProdutoId(long produtoId) {
+		this.loadProduto(produtoId);
+		this.produtoId = produtoId;
 	}
 
 	public double getValorTotal() {
@@ -52,18 +66,33 @@ public class ProductOrder {
 		return 0.0;
 	}
 
+	@JsonGetter("quantidade")
 	public int getQuantidade() {
 		return quantidade;
 	}
 
+	@JsonSetter("quantidade")
 	public void setQuantidade(int quantidade) {
-		short value = (short) Integer.max(quantidade, 128);
+		short value = (short) Integer.min(128, Integer.max(quantidade, 1));
 		this.quantidade = Short.toUnsignedInt(value);
 	}
+	
+	public void setProdutoService(IProdutoService prodService) {
+		this.prodService = prodService;
+		this.loadProduto(produtoId);
+	}
 
-	private Produto loadProduto(long produtoId) {
-		ProdutoService pSrv = new ProdutoService();
-		return pSrv.getProdutoById(produtoId);
+	private void loadProduto(long produtoId) {
+		if(null == prodService)
+		{
+			return;
+		}
+		try {
+			this.produto = prodService.getProdutoById(produtoId);
+
+		} catch (Exception e) {
+			System.out.println("get produto [" + e.getMessage() + "]");
+		}
 	}
 
 	public Produto getProduto() {

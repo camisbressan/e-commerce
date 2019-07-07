@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "5765ba7e-f0f9-4ee3-9307-3569b9834b40",
+		"name": "web-store",
+		"description": "trabalho Fiap",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Listar Cliente",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/spring-app/cliente/listar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"spring-app",
+						"cliente",
+						"listar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "adicionar-cliente",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"jose\",\n\t\"fone\": \"898989\"\n\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/spring-app/cliente/adicionar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"spring-app",
+						"cliente",
+						"adicionar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cli-endereco-add",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rua\": \"nome rua2244\",\n\t\"cidade\": \"nome cidade\",\n\t\"cep\": \"123456555\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/spring-app/cliente/1/endereco/adicionar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"spring-app",
+						"cliente",
+						"1",
+						"endereco",
+						"adicionar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cli-endereco-delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rua\": \"nome rua22\",\n\t\"cidade\": \"nome cidade\",\n\t\"cep\": \"123456555\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/spring-app/cliente/1/endereco/16",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"spring-app",
+						"cliente",
+						"1",
+						"endereco",
+						"16"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pedido/comprar",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"clienteId\": 1,\n  \"enderecoEntregaId\": 1,\n  \"produtos\": [\n    {\n      \"produtoId\": 1,\n      \"quantidade\": 4\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/spring-app/pedido/comprar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"spring-app",
+						"pedido",
+						"comprar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pedido-por-id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/spring-app/pedido/190",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"spring-app",
+						"pedido",
+						"190"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pedido-por-cli-id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/spring-app/pedido/cliente/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"spring-app",
+						"pedido",
+						"cliente",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

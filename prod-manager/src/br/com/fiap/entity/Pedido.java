@@ -9,6 +9,9 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -24,17 +27,18 @@ import br.com.fiap.pk.PedidosPK;
 @Entity(name = "pedidos")
 @Table(name = "pedidos")
 public class Pedido implements Serializable {
-	
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2181231814819173650L;
-	
+
+
 	@EmbeddedId
 	private PedidosPK pedidoPK;
+	
 	@Temporal(value = TemporalType.TIMESTAMP)
-	@Column(name = "DATAPEDIDO")
+	@Column(name = "DATA_PEDIDO")
 	private Date dataPedido;
 
 	@ManyToOne(fetch = FetchType.LAZY)
