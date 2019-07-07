@@ -25,7 +25,6 @@ import br.com.fiap.service.IClienteService;
 import br.com.fiap.service.IEnderecoService;
 import br.com.fiap.service.IPedidoService;
 import br.com.fiap.service.IProdutoService;
-import br.com.fiap.service.PedidoService;
 
 @RestController
 @RequestMapping("pedido")
@@ -37,14 +36,14 @@ public class PedidoController {
 	private IEnderecoService enderecoService;
 
 	@Autowired
-	private IPedidoService pedidoServece;
+	private IPedidoService pedidoService;
 	
 	@Autowired
 	private IProdutoService prodService;
 	
 	@GetMapping("{id}")
 	public ResponseEntity<Pedido> getById(@PathVariable("id") int id) {
-		Pedido p = pedidoServece.getById(id);
+		Pedido p = pedidoService.getById(id);
 		if (null != p) {
 			return new ResponseEntity<Pedido>(p, HttpStatus.OK);
 		}
@@ -58,7 +57,7 @@ public class PedidoController {
 			return new ResponseEntity<List<Pedido>>(HttpStatus.NOT_ACCEPTABLE);
 		}
 
-		List<Pedido> l = pedidoServece.getAllByCliente(c);
+		List<Pedido> l = pedidoService.getAllByCliente(c);
 
 		return new ResponseEntity<List<Pedido>>(l, l.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK);
 	}
@@ -78,7 +77,7 @@ public class PedidoController {
 		pk.setCodigo(codigo.intValue());
 		pedido.setPedidoPK(pk);
 		
-		Pedido rs = pedidoServece.add(pedido);
+		Pedido rs = pedidoService.add(pedido);
 		
 		return new ResponseEntity<Pedido>(rs, HttpStatus.OK);
 	}
