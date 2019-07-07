@@ -27,150 +27,157 @@ import br.com.fiap.service.IPedidoService;
 @RequestMapping("cliente")
 public class ClienteController {
 
-	@Autowired private IClienteService cliService;
-	
-	@Autowired private IEnderecoService enderecoService;
-	
-	@Autowired private IPedidoService pedidoServece;
-	
+	@Autowired
+	private IClienteService cliService;
+
+	@Autowired
+	private IEnderecoService enderecoService;
+
+	@Autowired
+	private IPedidoService pedidoServece;
+
 	@GetMapping("{id}")
 	public ResponseEntity<Cliente> getById(@PathVariable("id") int id) {
 		Cliente cli = cliService.getById(id);
-		if(null != cli) {
+		if (null != cli) {
 			return new ResponseEntity<Cliente>(cli, HttpStatus.OK);
-		}		
-		return new ResponseEntity<Cliente>(HttpStatus.NO_CONTENT); 
+		}
+		return new ResponseEntity<Cliente>(HttpStatus.NO_CONTENT);
 	}
-	
+
 	@GetMapping("/listar")
 	public ResponseEntity<List<Cliente>> getAll() {
 		List<Cliente> l = cliService.getAll();
-		return new ResponseEntity<List<Cliente>>(l, l.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK );
+		return new ResponseEntity<List<Cliente>>(l, l.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK);
 	}
-	
+
 	@PostMapping("adicionar")
 	public ResponseEntity<Void> addCli(@RequestBody Cliente cliente, UriComponentsBuilder builder) {
-		
+
 		Cliente c = cliService.add(cliente);
-		if(c != null && c.getId() > 0) {
+		if (c != null && c.getId() > 0) {
 			HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(builder.path("{id}").buildAndExpand(c.getId()).toUri());
-            return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+			headers.setLocation(builder.path("{id}").buildAndExpand(c.getId()).toUri());
+			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 		}
 		return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);
-		
+
 	}
-	
+
 	@PutMapping("atualizar")
 	public ResponseEntity<Cliente> updateCli(@RequestBody Cliente cliente) {
 		Cliente c = cliService.update(cliente);
-		if(null != c) {
+		if (null != c) {
 			return new ResponseEntity<Cliente>(c, HttpStatus.OK);
-		}		
+		}
 		return new ResponseEntity<Cliente>(HttpStatus.NO_CONTENT);
 	}
-	
+
 	@DeleteMapping("{id}")
 	public ResponseEntity<Void> deleteCli(@PathVariable("id") int id) {
 		cliService.delete(id);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
-	
-  /*
-   * Endereço do cliente
-   * 
-   */
+
+	/*
+	 * Endereço do cliente
+	 * 
+	 */
 	@GetMapping("{id}/enderecos")
 	public ResponseEntity<List<Endereco>> getCliEnd(@PathVariable("id") int id) {
 		Cliente c = cliService.getById(id);
-		if(c == null) {
+		if (c == null) {
 			return new ResponseEntity<List<Endereco>>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		List<Endereco> l = enderecoService.getByCliente(c);
-		return new ResponseEntity<List<Endereco>>(l, l.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK );
-		
+		return new ResponseEntity<List<Endereco>>(l, l.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK);
+
 	};
-	
+
 	@PostMapping("{id}/endereco/adicionar")
-	public ResponseEntity<Void> addCliEndereco(@PathVariable("id") int id, @RequestBody Endereco endereco, UriComponentsBuilder builder) {
-		
+	public ResponseEntity<Void> addCliEndereco(@PathVariable("id") int id, @RequestBody Endereco endereco,
+			UriComponentsBuilder builder) {
+
 		Cliente c = cliService.getById(id);
-		if(c == null) {
+		if (c == null) {
 			return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		endereco.setCliente(c);
 		Endereco ed = enderecoService.add(endereco);
-		if(ed != null ) {
+		if (ed != null) {
 			HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(builder.path("{id}/endereco/{endId").buildAndExpand(c.getId(), ed.getId()).toUri());
-            return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+			headers.setLocation(builder.path("{id}/endereco/{endId").buildAndExpand(c.getId(), ed.getId()).toUri());
+			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 		}
 		return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);
-		
+
 	}
+
 	@GetMapping("{id}/endereco/{endId}")
-	public ResponseEntity<Endereco> getCliEndereco(@PathVariable("id") int id, @PathVariable("endId") int endId, @RequestBody Endereco endereco) {
-		
+	public ResponseEntity<Endereco> getCliEndereco(@PathVariable("id") int id, @PathVariable("endId") int endId,
+			@RequestBody Endereco endereco) {
+
 		Cliente c = cliService.getById(id);
-		if(c == null) {
+		if (c == null) {
 			return new ResponseEntity<Endereco>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		Endereco ed = enderecoService.getById(c, endId);
-		if(ed != null ) {
-			
-            return new ResponseEntity<Endereco>(ed, HttpStatus.OK);
+		if (ed != null) {
+
+			return new ResponseEntity<Endereco>(ed, HttpStatus.OK);
 		}
 		return new ResponseEntity<Endereco>(HttpStatus.NO_CONTENT);
-		
+
 	}
-	
+
 	@PutMapping("{id}/endereco/{endId}")
-	public ResponseEntity<Endereco> updateCliEndereco(@PathVariable("id") int id, @PathVariable("endId") int endId, @RequestBody Endereco endereco) {
-		
+	public ResponseEntity<Endereco> updateCliEndereco(@PathVariable("id") int id, @PathVariable("endId") int endId,
+			@RequestBody Endereco endereco) {
+
 		Cliente c = cliService.getById(id);
-		if(c == null) {
+		if (c == null) {
 			return new ResponseEntity<Endereco>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		Endereco ed = enderecoService.update(endereco);
-		if(ed != null ) {
-			
-            return new ResponseEntity<Endereco>(ed, HttpStatus.OK);
+		if (ed != null) {
+
+			return new ResponseEntity<Endereco>(ed, HttpStatus.OK);
 		}
 		return new ResponseEntity<Endereco>(HttpStatus.NO_CONTENT);
-		
+
 	}
-	
+
 	@DeleteMapping("{id}/endereco/{endId}")
 	public ResponseEntity<Void> deleteCli(@PathVariable("id") int id, @PathVariable("endId") int endId) {
-		
+
 		Cliente c = cliService.getById(id);
-		if(c == null) {
+		if (c == null) {
 			return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		Endereco ed = enderecoService.getById(c, endId);
-		if(ed == null) {
+		if (ed == null) {
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		}
 		enderecoService.delete(ed);
-		
+
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
-	
+
 	/**
-	 *  Pedidos
+	 * Pedidos
 	 */
-	
+
 	@GetMapping("{id}/pedidos")
 	public ResponseEntity<List<Pedido>> getPedidoList(@PathVariable("id") int id) {
-		
+
 		Cliente c = cliService.getById(id);
-		if(c == null) {
+		if (c == null) {
 			return new ResponseEntity<List<Pedido>>(HttpStatus.NOT_ACCEPTABLE);
 		}
-		
+
 		List<Pedido> l = pedidoServece.getAllByCliente(c);
-		
-		return new ResponseEntity<List<Pedido>>(l, l.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK );
-		
+
+		return new ResponseEntity<List<Pedido>>(l, l.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK);
+
 	}
 }
