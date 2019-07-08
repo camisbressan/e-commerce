@@ -28,6 +28,10 @@ DROP TABLE if EXISTS clientes;
 DROP TABLE if EXISTS produtos;
 ```
 
+## Rotas para Postman
+
+web-store.postman_collection.json
+
 ## Contributing
 This project has the purpose of evaluating the discipline course of the Fiap, will be accepted only commits of the members of the group
 
